@@ -16,21 +16,21 @@ public class MyMessage {
         this.messageText = messageText;
     }
 
-    public String getMessageText() {
-        return messageText;
-    }
-
     public void setMessageSrcID(@Nullable String messageSrcID) {
         this.messageSrcID = messageSrcID;
+    }
+
+    public void setMessageDstID(@Nullable String messageDstID) {
+        this.messageDstID = messageDstID;
+    }
+
+    public String getMessageText() {
+        return messageText;
     }
 
     @Nullable
     public String getMessageSrcID() {
         return messageSrcID;
-    }
-
-    public void setMessageDstID(@Nullable String messageDstID) {
-        this.messageDstID = messageDstID;
     }
 
     @Nullable

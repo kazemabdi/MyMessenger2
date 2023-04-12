@@ -20,17 +20,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ir.kazix.mymessenger.Classes.Connection;
+import ir.kazix.mymessenger.Classes.MyConnection;
 import ir.kazix.mymessenger.Classes.MyConnectionAdapter;
 import ir.kazix.mymessenger.Classes.MyRequest;
-import ir.kazix.mymessenger.Constants.Constants;
+import ir.kazix.mymessenger.Classes.Constants;
 
-public class ChatFragmentConnections extends Fragment {
+public class ChatConnectionsFragment extends Fragment {
 
     RecyclerView recyclerView;
     MyConnectionAdapter connectionAdapter;
-    Connection connection;
-    ArrayList<Connection> connectionArrayList;
+    MyConnection myConnection;
+    ArrayList<MyConnection> myConnectionArrayList;
     ArrayList<JSONObject> jsonObjectArrayList;
 
     public MyRequest request;
@@ -52,7 +52,7 @@ public class ChatFragmentConnections extends Fragment {
         ((AppCompatImageView) view.findViewById(R.id.fragment_chat_connections_fab_refresh)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChatActivity.socket.getSocket().emit("get_connections");
+                ChatActivity.socket.getSocket().emit("get_connections", ChatActivity.user.getEmail());
             }
         });
         ((AppCompatImageView) view.findViewById(R.id.fragment_chat_connections_fab_close)).setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class ChatFragmentConnections extends Fragment {
             public void onClick(View view) {
 
                 ChatActivity.fragmentManager.beginTransaction()
-                        .replace(R.id.activity_chat_fragment, ChatFragmentRoom.class, null)
+                        .replace(R.id.activity_chat_fragment, ChatRoomFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("name") // name can be null
                         .commit();
@@ -91,16 +91,18 @@ public class ChatFragmentConnections extends Fragment {
     private void setSocketListener() {
 
         ChatActivity.socket.getSocket().on("get_connections", args -> {
-            Log.d("KA-ChatFragConnections", "get_connections");
 
-            connectionArrayList = new ArrayList<>();
+            myConnectionArrayList = new ArrayList<>();
             jsonObjectArrayList = new ArrayList<>();
+
             try {
 
                 JSONObject jsonObject = new JSONObject((String) args[0]);
+                Log.d("KA-ChatConnectionsFrg", "jsonObject" + jsonObject);
+
                 JSONArray jsonArray = jsonObject.names();
-                Log.d("KA-ChatFragConnections", "get_connections/jsonObject: " + jsonObject);
-                Log.d("KA-ChatFragConnections", "get_connections/jsonArray: " + jsonArray);
+                Log.d("KA-ChatConnectionsFrg", "jsonArray" + jsonArray);
+
 
                 if (jsonArray != null) {
 
@@ -108,25 +110,26 @@ public class ChatFragmentConnections extends Fragment {
 
                         jsonObjectArrayList.add(new JSONObject(jsonObject.getString(jsonArray.getString(i))));
 
-                        connection = new Connection();
+                        myConnection = new MyConnection();
 
-                        connection.setClientId(jsonObjectArrayList.get(i).getString("clientId"));
-                        Log.d("KA-ChatFragConnections", "get_connections/clientId " + i + ": " + jsonObjectArrayList.get(i).getString("clientId"));
-                        connection.setSocketId(jsonObjectArrayList.get(i).getString("socketId"));
-                        Log.d("KA-ChatFragConnections", "get_connections/socketId " + i + ": " + jsonObjectArrayList.get(i).getString("socketId"));
-                        connection.setRemotePort(jsonObjectArrayList.get(i).getString("remotePort"));
-                        Log.d("KA-ChatFragConnections", "get_connections/remotePort " + i + ": " + jsonObjectArrayList.get(i).getString("remotePort"));
-                        connection.setRemoteAddress(jsonObjectArrayList.get(i).getString("remoteAddress"));
-                        Log.d("KA-ChatFragConnections", "get_connections/remoteAddress " + i + ": " + jsonObjectArrayList.get(i).getString("remoteAddress"));
-                        connection.setUserAgent(jsonObjectArrayList.get(i).getString("userAgent"));
-                        Log.d("KA-ChatFragConnections", "get_connections/userAgent " + i + ": " + jsonObjectArrayList.get(i).getString("userAgent"));
-                        connection.setHandshakeTime(jsonObjectArrayList.get(i).getString("time"));
-                        Log.d("KA-ChatFragConnections", "get_connections/time " + i + ": " + jsonObjectArrayList.get(i).getString("time"));
+                        myConnection.setClientId(jsonObjectArrayList.get(i).getString("clientId"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/clientId " + i + ": " + jsonObjectArrayList.get(i).getString("clientId"));
+                        myConnection.setSocketId(jsonObjectArrayList.get(i).getString("socketId"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/socketId " + i + ": " + jsonObjectArrayList.get(i).getString("socketId"));
+                        myConnection.setRemotePort(jsonObjectArrayList.get(i).getString("remotePort"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/remotePort " + i + ": " + jsonObjectArrayList.get(i).getString("remotePort"));
+                        myConnection.setRemoteAddress(jsonObjectArrayList.get(i).getString("remoteAddress"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/remoteAddress " + i + ": " + jsonObjectArrayList.get(i).getString("remoteAddress"));
+                        myConnection.setUserAgent(jsonObjectArrayList.get(i).getString("userAgent"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/userAgent " + i + ": " + jsonObjectArrayList.get(i).getString("userAgent"));
+                        myConnection.setHandshakeTime(jsonObjectArrayList.get(i).getString("handshakeTime"));
+                        Log.d("KA-ChatConnectionsFrg", "get_connections/time " + i + ": " + jsonObjectArrayList.get(i).getString("handshakeTime"));
 
-                        if (!connection.getClientId().equals(ChatActivity.user.getEmail())) {
 
-                            connectionArrayList.add(connection);
-                            MyConnectionAdapter.localDataSet = connectionArrayList;
+                        if (!myConnection.getClientId().equals(ChatActivity.user.getEmail())) {
+
+                            myConnectionArrayList.add(myConnection);
+                            MyConnectionAdapter.localDataSet = myConnectionArrayList;
                             recyclerView.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -136,7 +139,7 @@ public class ChatFragmentConnections extends Fragment {
                             }); // end post
                         } else {
 
-                            Log.d("KA-ChatFragConnections", "get_connections/connection.getClientId equals user.getEmail");
+                            Log.d("KA-ChatFragConnections", "get_connections/myConnection.getClientId equals myUser.getEmail");
                         }
                     } // end for
                 } else {
@@ -157,18 +160,18 @@ public class ChatFragmentConnections extends Fragment {
                 JSONObject jsonObject = new JSONObject((String) args[0]);
                 Log.d("KA-ChatFragConnections", "new_connection/jsonObject: " + jsonObject);
 
-                connection = new Connection();
+                myConnection = new MyConnection();
 
-                connection.setClientId(jsonObject.getString("clientId"));
-                connection.setSocketId(jsonObject.getString("socketId"));
-                connection.setRemotePort(jsonObject.getString("remotePort"));
-                connection.setRemoteAddress(jsonObject.getString("remoteAddress"));
-                connection.setUserAgent(jsonObject.getString("userAgent"));
-                connection.setHandshakeTime(jsonObject.getString("time"));
+                myConnection.setClientId(jsonObject.getString("clientId"));
+                myConnection.setSocketId(jsonObject.getString("socketId"));
+                myConnection.setRemotePort(jsonObject.getString("remotePort"));
+                myConnection.setRemoteAddress(jsonObject.getString("remoteAddress"));
+                myConnection.setUserAgent(jsonObject.getString("userAgent"));
+                myConnection.setHandshakeTime(jsonObject.getString("handshakeTime"));
 
-                if (!connection.getClientId().equals(ChatActivity.user.getEmail())) {
+                if (!myConnection.getClientId().equals(ChatActivity.user.getEmail())) {
 
-                    MyConnectionAdapter.localDataSet.add(connection);
+                    MyConnectionAdapter.localDataSet.add(myConnection);
 
                     recyclerView.post(new Runnable() {
                         @Override
@@ -178,7 +181,7 @@ public class ChatFragmentConnections extends Fragment {
                     }); // end post
                 } else {
 
-                    Log.d("KA-ChatFragConnections", "new_connection/connection.getClientId equals user.getEmail");
+                    Log.d("KA-ChatFragConnections", "new_connection/myConnection.getClientId equals myUser.getEmail");
                 }
 
             } catch (JSONException jsonException) {

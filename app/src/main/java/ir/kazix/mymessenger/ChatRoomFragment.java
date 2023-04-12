@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +25,7 @@ import java.util.Map;
 import ir.kazix.mymessenger.Classes.MyMessage;
 import ir.kazix.mymessenger.Classes.MyMessageAdapter;
 
-public class ChatFragmentRoom extends Fragment {
+public class ChatRoomFragment extends Fragment {
 
     MyMessageAdapter messageAdapter;
     RecyclerView recyclerView;
@@ -83,7 +81,7 @@ public class ChatFragmentRoom extends Fragment {
                     });
 
                     messageMap = new HashMap<>();
-                    messageMap.put("email", ChatActivity.user.getEmail());
+                    messageMap.put("senderId", ChatActivity.user.getEmail());
                     messageMap.put("text", message.getMessageText());
                     messageMap.put("receiverId", receiverId);
 
@@ -106,7 +104,8 @@ public class ChatFragmentRoom extends Fragment {
 
                 JSONObject jsonObject = new JSONObject((String) args[0]);
 
-                myMessage.setMessageSrcID(jsonObject.getString("email"));
+                myMessage.setMessageSrcID(jsonObject.getString("senderId"));
+                myMessage.setMessageDstID(jsonObject.getString("receiverId"));
                 myMessage.setMessageText(jsonObject.getString("text"));
 
             } catch (JSONException jsonException) {

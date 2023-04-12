@@ -1,10 +1,6 @@
 package ir.kazix.mymessenger.Classes;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-public class Connection {
+public class MyConnection {
 
     private String clientId;
     private String socketId;

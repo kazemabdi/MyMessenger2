@@ -2,13 +2,11 @@ package ir.kazix.mymessenger;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +18,9 @@ import com.android.volley.Request;
 import java.util.HashMap;
 import java.util.Map;
 
-import ir.kazix.mymessenger.Constants.Constants;
+import ir.kazix.mymessenger.Classes.Constants;
 
-public class MainFragmentLogin extends Fragment {
+public class MainLoginFragment extends Fragment {
 
     CardView loginCardView;
     EditText emailEditText;

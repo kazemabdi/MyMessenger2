@@ -11,8 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import ir.kazix.mymessenger.Classes.MyRequest;
-import ir.kazix.mymessenger.Classes.User;
-import ir.kazix.mymessenger.Constants.Constants;
+import ir.kazix.mymessenger.Classes.Constants;
 import ir.kazix.mymessenger.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,12 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyRequest request;
 
-//    public static User user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -44,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.activity_main_fragment, MainFragmentLogin.class, null)
+                        .replace(R.id.activity_main_fragment, MainLoginFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("name") // name can be null
                         .commit();
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.activity_main_fragment, MainFragmentRegister.class, null)
+                        .replace(R.id.activity_main_fragment, MainRegisterFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("name") // name can be null
                         .commit();

@@ -1,7 +1,6 @@
 package ir.kazix.mymessenger;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ir.kazix.mymessenger.Classes.MyRequest;
-import ir.kazix.mymessenger.Constants.Constants;
+import ir.kazix.mymessenger.Classes.Constants;
 
-public class MainFragmentRegister extends Fragment {
+public class MainRegisterFragment extends Fragment {
 
 
     CardView registerCardView;
@@ -58,7 +57,6 @@ public class MainFragmentRegister extends Fragment {
         registerCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("KA-MainFragmentLogin", "onClick_loginCardView");
 
                 if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.toString().isEmpty()) {
 

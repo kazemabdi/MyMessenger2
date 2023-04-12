@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -14,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import ir.kazix.mymessenger.ChatActivity;
-import ir.kazix.mymessenger.ChatFragmentRoom;
+import ir.kazix.mymessenger.ChatRoomFragment;
 import ir.kazix.mymessenger.R;
 
 public class MyConnectionAdapter extends RecyclerView.Adapter<MyConnectionAdapter.ViewHolder> {
 
-    public static ArrayList<Connection> localDataSet;
+    public static ArrayList<MyConnection> localDataSet;
 
     public MyConnectionAdapter() {
         localDataSet = new ArrayList<>();
@@ -103,11 +102,11 @@ public class MyConnectionAdapter extends RecyclerView.Adapter<MyConnectionAdapte
 
         viewHolder.getConnectionView().setOnClickListener(view -> {
 
-            ChatFragmentRoom.receiverId = localDataSet.get(viewHolder.getAdapterPosition()).getClientId();
+            ChatRoomFragment.receiverId = localDataSet.get(viewHolder.getAdapterPosition()).getClientId();
 
             ChatActivity.fragmentManager
                     .beginTransaction()
-                    .replace(R.id.activity_chat_fragment, ChatFragmentRoom.class, null)
+                    .replace(R.id.activity_chat_fragment, ChatRoomFragment.class, null)
                     .setReorderingAllowed(true)
                     .addToBackStack("name") // name can be null
                     .commit();

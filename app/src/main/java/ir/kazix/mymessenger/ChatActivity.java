@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import io.socket.emitter.Emitter;
 import ir.kazix.mymessenger.Classes.MyRequest;
 import ir.kazix.mymessenger.Classes.MySocket;
-import ir.kazix.mymessenger.Classes.User;
-import ir.kazix.mymessenger.Constants.Constants;
+import ir.kazix.mymessenger.Classes.MyUser;
+import ir.kazix.mymessenger.Classes.Constants;
 import ir.kazix.mymessenger.databinding.ActivityChatBinding;
 
 public class ChatActivity extends AppCompatActivity {
@@ -35,9 +35,7 @@ public class ChatActivity extends AppCompatActivity {
 
     Intent intent;
 
-    String sessionId;
-
-    public static User user;
+    public static MyUser user;
 
     MyRequest request;
 
@@ -56,22 +54,17 @@ public class ChatActivity extends AppCompatActivity {
         try {
 
             JSONArray jsonArray = new JSONArray(response);
-//            JSONObject jsonObject = jsonArray.getJSONObject(jsonArray.length() - 1);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObjectArrayList.add(jsonArray.getJSONObject(i));
                 Log.d("KA-ChatActivity", "jsonObjectArrayList.get(" + i + ")" + jsonObjectArrayList.get(i));
             }
 
-            user = new User();
+            user = new MyUser();
             user.setEmail(jsonObjectArrayList.get(0).getString("email"));
-            user.setPassword(jsonObjectArrayList.get(0).getString("password"));
+            user.setSessionId(jsonObjectArrayList.get(jsonObjectArrayList.size() - 1).getString("session_id"));
 
-            Log.d("KA-ChatActivity","user.getEmail()"+user.getEmail());
-            Log.d("KA-ChatActivity","user.getPassword()"+user.getPassword());
-
-            sessionId = jsonObjectArrayList.get(1).getString("session_id");
-            Toast.makeText(this, sessionId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, user.getSessionId(), Toast.LENGTH_SHORT).show();
 
         } catch (JSONException jsonException) {
 
@@ -86,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.activity_chat_fragment, ChatFragmentConnections.class, null)
+                .replace(R.id.activity_chat_fragment, ChatConnectionsFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("name") // name can be null
                 .commit();
@@ -97,7 +90,7 @@ public class ChatActivity extends AppCompatActivity {
         socket.getSocket().on("connect", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-//                Log.d("KA-ChatActivity", "socket id: " + socket.getSocket().id());
+
                 MySocket.mySocketID = socket.getSocket().id();
 
                 ChatActivity.socket.getSocket().emit("join_socket", ChatActivity.user.getEmail());

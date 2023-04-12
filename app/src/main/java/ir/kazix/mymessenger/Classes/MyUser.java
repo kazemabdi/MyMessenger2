@@ -2,7 +2,9 @@ package ir.kazix.mymessenger.Classes;
 
 import androidx.annotation.Nullable;
 
-public class User {
+public class MyUser {
+
+    private String sessionId;
 
     private String email;
 
@@ -12,56 +14,22 @@ public class User {
     @Nullable
     private String firstName;
 
+    @Nullable
     private String password;
 
-//    public User(String email, @Nullable String lastName, @Nullable String firstName, String password) {
-//        this.email = email;
-//        this.lastName = lastName;
-//        this.firstName = firstName;
-//        this.password = password;
-//    }
-//
-//    public User(String email, String password) {
-//        this.email = email;
-//        this.password = password;
-//    }
-//
-//    public User(String email) {
-//        this.email = email;
-//    }
-
-
-    public void setEmail(String email) {
-        this.email = email;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setLastName(@Nullable String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setFirstName(@Nullable String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getEmail() {
         return email;
     }
 
-    @Nullable
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Nullable
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
